@@ -1,4 +1,5 @@
 #include <AppKit/AppKit.h>
+#include <CoreVideo/CoreVideo.h>
 
 @interface MainWindowDelegate : NSObject< NSWindowDelegate >
 {
@@ -29,6 +30,11 @@
 @end
 
 @interface MainWindow : NSWindow
+{
+    @public
+        NSCondition*     m_displayLinkSignal;
+        CVDisplayLinkRef m_displayLink;
+}
 @end
 
 @implementation MainWindow
@@ -37,6 +43,20 @@
 - (BOOL)canBecomeMainWindow { return true; }
 
 @end
+
+CVReturn DisplayLinkCallback( CVDisplayLinkRef   displayLink, 
+                              const CVTimeStamp* inNow, 
+                              const CVTimeStamp* inOutputTime, 
+                              CVOptionFlags      flagsIn, 
+                              CVOptionFlags*     flagsOut, 
+                              void*              context )
+{
+    MainWindow* window = (MainWindow*)context;
+
+    [window->m_displayLinkSignal signal];
+
+    return kCVReturnSuccess;
+}
 
 MainWindow* CreateMainWindow( bool* running )
 {
@@ -50,6 +70,11 @@ MainWindow* CreateMainWindow( bool* running )
     [window setTitle: @"synthesizer by cnc" ];
     [window setDelegate: delegate];
     [window makeKeyAndOrderFront: NULL];
+
+    window->m_displayLinkSignal = [NSCondition new];
+    CVDisplayLinkCreateWithActiveCGDisplays( &window->m_displayLink );
+    CVDisplayLinkSetOutputCallback( window->m_displayLink, DisplayLinkCallback, (void*)window );
+    CVDisplayLinkStart( window->m_displayLink );
     
     return window;
 }

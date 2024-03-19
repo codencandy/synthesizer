@@ -1,6 +1,9 @@
 #include <AppKit/AppKit.h>
 
+#include "CNC_Types.h"
 #include "CNC_Window.mm"
+#include "CNC_Render.mm"
+#include "CNC_Audio.mm"
 
 int main()
 {
@@ -30,6 +33,8 @@ int main()
                 [app updateWindows];                                           
             }
             while( event != NULL );
+
+            [window->m_displayLinkSignal wait];
         }
     }
 

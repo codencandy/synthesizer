@@ -1,3 +1,15 @@
-FRAMEWORKS='-framework AppKit'
+FRAMEWORKS='-framework AppKit -framework CoreVideo -framework Metal -framework MetalKit'
+FLAGS='-std=c++20 --debug'
+TIMEFORMAT=%R
 
-clang ${FRAMEWORKS} CNC_Main.mm -o synthesizer --debug
+platform()
+{
+    clang++ ${FRAMEWORKS} CNC_Main.mm -o synthesizer ${FLAGS}
+}
+
+main()
+{
+    time platform
+}
+
+main

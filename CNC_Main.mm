@@ -35,7 +35,7 @@ int main()
     ImGui_ImplMetal_Init(renderer->m_device);
     ImGui_ImplOSX_Init(renderer->m_view);
 
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize.x = renderer->m_view.bounds.size.width;
     io.DisplaySize.y = renderer->m_view.bounds.size.height;
 
@@ -67,7 +67,23 @@ int main()
             ImGui_ImplOSX_NewFrame( renderer->m_view );
             ImGui::NewFrame();     
 
-            ShowUserinterface( &showui );
+            if( showui )
+            {
+                ShowUserinterface( &showui );
+            }
+            else
+            {
+                if( io.KeysDown[ImGuiKey_F1] )
+                {
+                    showui = true;
+                }
+            }
+
+            // shut down 
+            if( io.KeysDown[ImGuiKey_Escape] )
+            {
+                running = false;
+            }
             
             [renderer Render];
         }

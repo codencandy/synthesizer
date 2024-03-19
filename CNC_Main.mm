@@ -25,24 +25,10 @@ int main()
     MainWindow* window   = CreateMainWindow( &running );
     Renderer*   renderer = CreateRenderer();
 
-    [window setContentView: renderer->m_view];
-
-    // IMGUI SETUP
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    
-    // Setup Renderer backend
-    ImGui_ImplMetal_Init(renderer->m_device);
-    ImGui_ImplOSX_Init(renderer->m_view);
-
-    ImGuiIO& io = ImGui::GetIO();
-    io.DisplaySize.x = renderer->m_view.bounds.size.width;
-    io.DisplaySize.y = renderer->m_view.bounds.size.height;
-
-    CGFloat framebufferScale = renderer->m_view.window.screen.backingScaleFactor ?: NSScreen.mainScreen.backingScaleFactor;
-    io.DisplayFramebufferScale = ImVec2(framebufferScale, framebufferScale);
-
     CustomizeUi();
+    ImGuiIO& io = ImGui::GetIO();
+
+    [window setContentView: renderer->m_view];
 
     while( running )
     {

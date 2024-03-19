@@ -17,19 +17,53 @@ void CheckError( NSError* error )
 @interface Renderer : NSObject< MTKViewDelegate >
 {
     @public
-        MTKView*              m_view;
+        MTKView*                     m_view;
 
         id< MTLDevice >              m_device;
         id< MTLCommandQueue >        m_queue;
         id< MTLRenderPipelineState > m_pipelineState;
+
+        struct VertexInput           m_vertices[4];
+        
+        id< MTLBuffer >              m_vertexBuffer;
+        id< MTLBuffer >              m_indexBuffer;
 }
 
+- (void)LoadQuadData;
 - (void)LoadShaders;
 - (void)Render;
 
 @end
 
 @implementation Renderer
+
+- (void)LoadQuadData
+{
+    /*
+        D ---- C
+        |      |
+        |      |
+        A ---- B 
+     */
+
+    v3 A = { -1.0f, -1.0f, 0.0f }; // 0
+    v3 B = {  1.0f, -1.0f, 0.0f }; // 1
+    v3 C = {  1.0f,  1.0f, 0.0f }; // 2
+    v3 D = { -1.0f,  1.0f, 0.0f }; // 3
+
+    u32 indices[6] = { 0, 1, 2, 2, 3, 0 };
+
+    m_vertices[0].m_position = A;
+    m_vertices[1].m_position = B;
+    m_vertices[2].m_position = C;
+    m_vertices[3].m_position = D;
+
+    m_vertexBuffer = [m_device newBufferWithLength: sizeof( struct VertexInput ) * 4 options: MTLResourceCPUCacheModeDefaultCache];
+    m_indexBuffer  = [m_device newBufferWithLength: sizeof( u32 ) * 6 options: MTLResourceCPUCacheModeDefaultCache];
+
+    memcpy( [m_vertexBuffer contents], m_vertices, sizeof( struct VertexInput ) * 4 );
+    memcpy( [m_indexBuffer  contents], indices,  sizeof( u32 ) * 6 );
+}
 
 - (void)LoadShaders;
 {
@@ -89,6 +123,10 @@ void CheckError( NSError* error )
 
         [commandEncoder setRenderPipelineState: m_pipelineState];
 
+        // render the fullscreen quad
+        [commandEncoder setVertexBuffer: m_vertexBuffer offset: 0 atIndex: 0];
+        [commandEncoder drawIndexedPrimitives: MTLPrimitiveTypeTriangle indexCount: 6 indexType: MTLIndexTypeUInt32 indexBuffer: m_indexBuffer indexBufferOffset:0];
+
         // render the ui on top of the scene
         ImGui::Render();
         ImGui_ImplMetal_RenderDrawData( ImGui::GetDrawData(), commandBuffer, commandEncoder);
@@ -122,6 +160,7 @@ Renderer* CreateRenderer()
     [renderer->m_view setPaused: true];
 
     [renderer LoadShaders];
+    [renderer LoadQuadData];
 
     // IMGUI SETUP
     IMGUI_CHECKVERSION();

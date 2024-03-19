@@ -1,5 +1,6 @@
 #include <AppKit/AppKit.h>
 #include <CoreVideo/CoreVideo.h>
+#include "CNC_Types.h"
 
 @interface MainWindowDelegate : NSObject< NSWindowDelegate >
 {
@@ -62,7 +63,7 @@ MainWindow* CreateMainWindow( bool* running )
 {
     MainWindowDelegate* delegate = [[MainWindowDelegate alloc] initWithBool:running];
     
-    NSRect contentRect = NSMakeRect( 0, 0, 800, 500 );
+    NSRect contentRect = NSMakeRect( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT );
     MainWindow* window = [[MainWindow alloc] initWithContentRect: contentRect 
                                                        styleMask: NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                                                          backing: NSBackingStoreBuffered defer: false];

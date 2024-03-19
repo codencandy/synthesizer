@@ -1,2 +1,5 @@
 synthesizer
 *.dSYM
+imgui.ini
+CNC_ImGui.o
+.DS_Store

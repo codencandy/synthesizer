@@ -26,4 +26,12 @@ struct VertexInput
     v3 m_position;
 };
 
+struct SoundBuffer
+{
+    u32   m_numberOfSamples;
+    u32   m_sampleRate;
+    u32   m_numberOfChannels;
+    void* m_buffer[2];
+};
+
 #endif//CNC_TYPES_H

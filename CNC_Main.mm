@@ -22,8 +22,9 @@ int main()
     bool running = true;
     bool showui  = true;
 
-    MainWindow* window   = CreateMainWindow( &running );
-    Renderer*   renderer = CreateRenderer();
+    MainWindow*    window   = CreateMainWindow( &running );
+    Renderer*      renderer = CreateRenderer();
+    AudioRenderer* audio    = CreateAudio();
 
     CustomizeUi();
     ImGuiIO& io = ImGui::GetIO();

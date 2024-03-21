@@ -30,9 +30,14 @@ int main()
     ImGuiIO& io = ImGui::GetIO();
 
     [window setContentView: renderer->m_view];
-
+    
+    struct Platform platform = {};
+    platform.m_audioService = audio;
+    platform.startPlayer    = StartPlayer;
+    platform.stopPlayer     = StopPlayer;
+    
     struct Application synthApp = {};
-    synthApp.m_playing = false;
+    synthApp.m_platform = platform;
 
     while( running )
     {
@@ -60,10 +65,6 @@ int main()
             if( showui )
             {
                 ShowUserinterface( &showui, &synthApp );
-                if( synthApp.m_playing ) 
-                    [audio play];
-                else
-                    [audio stop];
             }
             else
             {

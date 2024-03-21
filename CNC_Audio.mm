@@ -113,7 +113,7 @@ void RenderAudio( struct SoundBuffer* buffer )
 
 - (void)play
 {   
-    NSError* error = [NSError alloc];
+    NSError* error = NULL;
 
     if( [m_audioEngine startAndReturnError:&error] == NO )
     {
@@ -135,3 +135,14 @@ AudioRenderer* CreateAudio()
     return audio;
 }
 
+void StartPlayer( void* audio )
+{
+    AudioRenderer* audioEngine = (AudioRenderer*)audio;
+    [audioEngine play];
+}
+
+void StopPlayer( void* audio )
+{
+    AudioRenderer* audioEngine = (AudioRenderer*)audio;
+    [audioEngine stop];
+}

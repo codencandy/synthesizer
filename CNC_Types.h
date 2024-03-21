@@ -18,8 +18,8 @@ typedef simd_float4     v4;
 typedef simd_float3x3   m3;
 typedef simd_float4x4   m4;
 
-#define WINDOW_WIDTH    800
-#define WINDOW_HEIGHT   500
+#define WINDOW_WIDTH    1000
+#define WINDOW_HEIGHT   600
 
 struct VertexInput
 {

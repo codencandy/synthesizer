@@ -90,6 +90,9 @@ void CustomizeUi()
 
 void ShowUserinterface( bool* showui, Application* app )
 {
+    Platform* platform    = &app->m_platform;
+    void*     audioEngine =  app->m_platform.m_audioService;
+
     ImGui::SetNextWindowSize(ImVec2(320,480), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos( ImVec2( 11, 11), ImGuiCond_FirstUseEver );
     
@@ -105,8 +108,8 @@ void ShowUserinterface( bool* showui, Application* app )
     
 
     ImGui::SeparatorText( "PLAYER" );
-    if( ImGui::Button( "PLAY" ) ) app->m_playing = true;
-    if( ImGui::Button( "STOP" ) ) app->m_playing = false;
+    if( ImGui::Button( "PLAY" ) ) platform->startPlayer( audioEngine );
+    if( ImGui::Button( "STOP" ) ) platform->stopPlayer( audioEngine );
 
     ImGui::End();
 }

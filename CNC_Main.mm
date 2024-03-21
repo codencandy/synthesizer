@@ -31,6 +31,9 @@ int main()
 
     [window setContentView: renderer->m_view];
 
+    struct Application synthApp = {};
+    synthApp.m_playing = false;
+
     while( running )
     {
         @autoreleasepool
@@ -56,7 +59,11 @@ int main()
 
             if( showui )
             {
-                ShowUserinterface( &showui );
+                ShowUserinterface( &showui, &synthApp );
+                if( synthApp.m_playing ) 
+                    [audio play];
+                else
+                    [audio stop];
             }
             else
             {

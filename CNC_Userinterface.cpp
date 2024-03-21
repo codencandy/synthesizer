@@ -1,4 +1,5 @@
 #include "CNC_Types.h"
+#include "CNC_Application.h"
 #include <imgui.h>
 
 void CustomizeUi()
@@ -87,23 +88,25 @@ void CustomizeUi()
     colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 }
 
-void ShowUserinterface( bool* showui )
+void ShowUserinterface( bool* showui, Application* app )
 {
     ImGui::SetNextWindowSize(ImVec2(320,480), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos( ImVec2( 11, 11), ImGuiCond_FirstUseEver );
     
     ImGui::Begin( "SYNTHESIZER UI", showui );
 
-    f32 roll     = 1.0f;
+    f32 volume   = 1.0f;
     f32 pitch    = 1.0f;
-    f32 yaw      = 1.0f;
-    f32 posZ     = 1.0f;
-
-    ImGui::SeparatorText("CAMERA");
+    
+    ImGui::SeparatorText("SYNTH");
     ImGui::Spacing();
-    ImGui::DragFloat( "ROLL",     &roll,          0.5f, -90.0f,   90.0f );
+    ImGui::DragFloat( "VOLUME",   &volume,        0.5f, -90.0f,   90.0f );
     ImGui::DragFloat( "PITCH",    &pitch,         0.5f, -90.0f,   90.0f );
-    ImGui::DragFloat( "YAW",      &yaw,           0.5f, -90.0f,   90.0f );
+    
+
+    ImGui::SeparatorText( "PLAYER" );
+    if( ImGui::Button( "PLAY" ) ) app->m_playing = true;
+    if( ImGui::Button( "STOP" ) ) app->m_playing = false;
 
     ImGui::End();
 }

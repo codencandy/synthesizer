@@ -10,6 +10,7 @@
 #include "CNC_Render.mm"
 #include "CNC_Audio.mm"
 #include "CNC_Userinterface.cpp"
+#include "CNC_Application.cpp"
 
 int main()
 {
@@ -39,6 +40,8 @@ int main()
     struct Application synthApp = {};
     synthApp.m_platform = platform;
 
+    Load( &synthApp );
+
     while( running )
     {
         @autoreleasepool
@@ -57,6 +60,10 @@ int main()
             while( event != NULL );
 
             [window->m_displayLinkSignal wait];
+
+            Update( &synthApp );
+            Render( &synthApp );
+
             // Start the Dear ImGui frame
             ImGui_ImplMetal_NewFrame( [renderer->m_view currentRenderPassDescriptor] );
             ImGui_ImplOSX_NewFrame( renderer->m_view );
@@ -83,6 +90,8 @@ int main()
             [renderer Render];
         }
     }
+
+    Exit( &synthApp );
 
     return 0;
 }

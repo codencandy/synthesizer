@@ -20,6 +20,8 @@ struct Env // ADSR
     f64 m_decayTime;
     f32 m_sustainTime;
     f64 m_releaseTime;
+
+    f32 m_level;
 };
 
 struct Synthesizer
@@ -30,7 +32,7 @@ struct Synthesizer
     f64 m_currentTime;
     
     f64 m_samplerate;
-    f64 m_samplesPerMs;
+    f64 m_timePerSample;
 
     f32 m_level;
 };

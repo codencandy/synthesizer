@@ -53,8 +53,8 @@
             
             struct SoundBuffer buffer = {0};
             buffer.m_numberOfSamples  = framecount;
-            buffer.m_sampleRate       = m_sampleRate;
             buffer.m_numberOfChannels = outputData->mNumberBuffers;
+            buffer.m_bufferTime       = timestamp->mSampleTime / m_sampleRate;
 
             for( u32 i=0; i<buffer.m_numberOfChannels; ++i )
             {

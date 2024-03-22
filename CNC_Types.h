@@ -29,8 +29,8 @@ struct VertexInput
 struct SoundBuffer
 {
     u32   m_numberOfSamples;
-    u32   m_sampleRate;
     u32   m_numberOfChannels;
+    f64   m_bufferTime;
     void* m_buffer[2];
 };
 

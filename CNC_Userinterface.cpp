@@ -90,8 +90,10 @@ void CustomizeUi()
 
 void ShowUserinterface( bool* showui, Application* app )
 {
-    Platform* platform    = &app->m_platform;
-    void*     audioEngine =  app->m_platform.m_audioService;
+    Platform*    platform    = &app->m_platform;
+    void*        audioEngine =  app->m_platform.m_audioService;
+    Synthesizer* synth       = &app->m_synth;
+    Env*         env         = &synth->m_env;
 
     ImGui::SetNextWindowSize(ImVec2(320,480), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos( ImVec2( 11, 11), ImGuiCond_FirstUseEver );
@@ -106,10 +108,11 @@ void ShowUserinterface( bool* showui, Application* app )
     ImGui::DragFloat( "VOLUME",   &volume,        0.5f, -90.0f,   90.0f );
     ImGui::DragFloat( "PITCH",    &pitch,         0.5f, -90.0f,   90.0f );
     
-
     ImGui::SeparatorText( "PLAYER" );
     if( ImGui::Button( "PLAY" ) ) platform->startPlayer( audioEngine );
     if( ImGui::Button( "STOP" ) ) platform->stopPlayer( audioEngine );
+
+    ImGui::SeparatorText( "SYNTH" );
 
     ImGui::End();
 }

@@ -9,10 +9,10 @@ void Load( Application* application )
 
     // init synth
     // samples per 2PI = 44100 / hz
-    synth->m_currentTime  = 0.0;
-    synth->m_samplerate   = 44100.0;
-    synth->m_samplesPerMs = synth->m_samplerate * 0.001;
-    synth->m_level        = 0.0;
+    synth->m_currentTime   = 0.0;
+    synth->m_samplerate    = 44100.0;
+    synth->m_timePerSample = 1.0 / synth->m_samplerate;
+    synth->m_level         = 0.0;
 
     // init osc
     osc->m_freq           = 200.0f;
@@ -21,12 +21,15 @@ void Load( Application* application )
     osc->m_phaseIncrement = (2.0f * M_PI) / (synth->m_samplerate / osc->m_freq); 
 
     // init env
-    env->m_attackLevel = 0.3f;
-    env->m_attackTime  = 0.1f;
-    env->m_decayLevel  = 0.2f;
-    env->m_decayTime   = 0.2f;
-    env->m_sustainTime = 0.2f;
-    env->m_releaseTime = 0.1f;
+    env->m_attackLevel    = 0.4f;
+    env->m_attackTime     = 0.5f;
+    
+    env->m_decayLevel     = 0.3f;
+    env->m_decayTime      = 1.0f;
+    
+    env->m_sustainTime    = 2.0f;
+    
+    env->m_releaseTime    = 0.5f;
 }
 
 void Update( Application* application )
@@ -49,9 +52,11 @@ void RenderSound( SoundBuffer* soundBuffer, void* applicationContext )
 
     for( u32 i=0; i<soundBuffer->m_numberOfSamples; ++i )
     {
-        f32 sample = mixSample( &synth->m_osc, &synth->m_env, 0.0 );
+        f32 sample = mixSample( &synth->m_osc, &synth->m_env, synth->m_currentTime );
         *left++  = sample;
         *right++ = sample;
+
+        synth->m_currentTime += synth->m_timePerSample;
     }
 }
 

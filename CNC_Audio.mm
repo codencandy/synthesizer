@@ -1,31 +1,6 @@
 #include <AVFoundation/AVFoundation.h>
 #include "CNC_Types.h"
 
-/*
-    ADSR
-    A - Attack
-    D - Decay
-    S - Soustain
-    R - Release
- */
-
-void RenderAudio( struct SoundBuffer* buffer )
-{
-    // check the case that the output needs more samples than left in the source
-    u32 samplesNeeded = buffer->m_numberOfSamples;
-    
-    for( u32 c=0; c < buffer->m_numberOfChannels; ++c )
-    {
-        f32* sample = (f32*)buffer->m_buffer[c];
-        
-        for( u32 i=0; i<buffer->m_numberOfSamples; i++ )
-        {
-            *sample = 0x0;
-            sample++;
-        }
-    }
-}
-
 @interface AudioRenderer : NSObject
 {
     @public
@@ -39,6 +14,8 @@ void RenderAudio( struct SoundBuffer* buffer )
         u32                          m_numberOfChannels;
         u32                          m_sampleRate;
         f32                          m_amplitude;
+
+        void*                        m_applicationContext;
 }
 
 - (void)play;
@@ -84,8 +61,8 @@ void RenderAudio( struct SoundBuffer* buffer )
                 buffer.m_buffer[i] = outputData->mBuffers[i].mData;
             }
 
-            RenderAudio( &buffer );
-            
+            RenderSound( &buffer, m_applicationContext );
+
             return noErr;
         };
 
@@ -129,9 +106,11 @@ void RenderAudio( struct SoundBuffer* buffer )
 
 @end
 
-AudioRenderer* CreateAudio()
+AudioRenderer* CreateAudio( void* app )
 {
     AudioRenderer* audio = [AudioRenderer new];
+    audio->m_applicationContext = app;
+
     return audio;
 }
 

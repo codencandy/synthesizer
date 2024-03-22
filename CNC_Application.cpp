@@ -1,8 +1,32 @@
 #include "CNC_Application.h"
+#include "CNC_Synth.h"
 
-void Load( Application* applicaiton )
+void Load( Application* application )
 {
+    Synthesizer* synth = &application->m_synth;
+    Osc*         osc   = &application->m_synth.m_osc;
+    Env*         env   = &application->m_synth.m_env;
 
+    // init synth
+    // samples per 2PI = 44100 / hz
+    synth->m_currentTime  = 0.0;
+    synth->m_samplerate   = 44100.0;
+    synth->m_samplesPerMs = synth->m_samplerate * 0.001;
+    synth->m_level        = 0.0;
+
+    // init osc
+    osc->m_freq           = 200.0f;
+    osc->m_phaseOffset    = 0.0f;
+    osc->m_phase          = 0.0f;
+    osc->m_phaseIncrement = (2.0f * M_PI) / (synth->m_samplerate / osc->m_freq); 
+
+    // init env
+    env->m_attackLevel = 0.3f;
+    env->m_attackTime  = 0.1f;
+    env->m_decayLevel  = 0.2f;
+    env->m_decayTime   = 0.2f;
+    env->m_sustainTime = 0.2f;
+    env->m_releaseTime = 0.1f;
 }
 
 void Update( Application* application )
@@ -15,9 +39,20 @@ void Render( Application* application )
 
 }
 
-void RenderSound( f32* soundBuffer, u32 numberOfSamples )
+void RenderSound( SoundBuffer* soundBuffer, void* applicationContext )
 {
+    Application* app   = (Application*)applicationContext;
+    Synthesizer* synth = &app->m_synth;
 
+    f32* left  = (f32*)soundBuffer->m_buffer[0];
+    f32* right = (f32*)soundBuffer->m_buffer[1];
+
+    for( u32 i=0; i<soundBuffer->m_numberOfSamples; ++i )
+    {
+        f32 sample = mixSample( &synth->m_osc, &synth->m_env, 0.0 );
+        *left++  = sample;
+        *right++ = sample;
+    }
 }
 
 void Exit( Application* application )

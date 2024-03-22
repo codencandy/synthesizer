@@ -6,11 +6,13 @@
 #include <imgui_impl_osx.h>
 
 #include "CNC_Types.h"
+#include "CNC_Userinterface.cpp"
+#include "CNC_Application.cpp"
+#include "CNC_Synth.cpp"
+
 #include "CNC_Window.mm"
 #include "CNC_Render.mm"
 #include "CNC_Audio.mm"
-#include "CNC_Userinterface.cpp"
-#include "CNC_Application.cpp"
 
 int main()
 {
@@ -23,9 +25,11 @@ int main()
     bool running = true;
     bool showui  = true;
 
+    struct Application synthApp = {};
+    
     MainWindow*    window   = CreateMainWindow( &running );
     Renderer*      renderer = CreateRenderer();
-    AudioRenderer* audio    = CreateAudio();
+    AudioRenderer* audio    = CreateAudio( &synthApp );
 
     CustomizeUi();
     ImGuiIO& io = ImGui::GetIO();
@@ -36,10 +40,8 @@ int main()
     platform.m_audioService = audio;
     platform.startPlayer    = StartPlayer;
     platform.stopPlayer     = StopPlayer;
+    synthApp.m_platform     = platform;
     
-    struct Application synthApp = {};
-    synthApp.m_platform = platform;
-
     Load( &synthApp );
 
     while( running )

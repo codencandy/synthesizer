@@ -4,3 +4,4 @@
 #include "imgui_widgets.cpp"
 #include "imgui_impl_metal.mm"
 #include "imgui_impl_osx.mm"
+#include "imgui-knobs.cpp"

@@ -1,5 +1,5 @@
 FRAMEWORKS='-framework AppKit -framework CoreVideo -framework Metal -framework MetalKit -framework GameController -framework AVFoundation'
-FLAGS='-std=c++20 --debug -Ilibs/imgui -Ilibs/imgui/backends'
+FLAGS='-std=c++20 --debug -Ilibs/imgui -Ilibs/imgui/backends -Ilibs/imgui-knobs'
 TIMEFORMAT=%R
 IGNORE='-Wno-nullability-completeness -Wno-unused-command-line-argument'
 BUILD_TYPE=$1

@@ -1,4 +1,23 @@
 #include "CNC_Synth.h"
+#include <string.h>
+
+void resetSynth( Synthesizer* synth )
+{
+    synth->m_currentTime     = 0.0;
+    synth->m_env.m_plotIndex = 0;
+    memset( synth->m_env.m_plotLevels, 0, sizeof( f32 ) * 200 );
+}
+
+void changeVolume( Synthesizer* synth, f32 level )
+{
+    synth->m_level = level * 0.01f;
+}
+
+void changePitch( Synthesizer* synth, Osc* osc, f32 hz )
+{
+    osc->m_freq           = hz;
+    osc->m_phaseIncrement = (2.0f * M_PI) / (synth->m_samplerate / osc->m_freq);
+}
 
 f32 oscSample( Osc* osc )
 {
@@ -63,6 +82,6 @@ f32 mixSample( Osc* osc, Env* env, f64 time )
 {
     f32 newSample = oscSample( osc );
     newSample *= envLevel( env, time );
-
+    
     return newSample;
 }

@@ -81,8 +81,6 @@
         m_amplitude        = 0.5f;
 
         m_mainMixerNode.outputVolume = m_amplitude;
-
-        [self printSoundSettings: m_audioFormat];
     }
 
     return self;

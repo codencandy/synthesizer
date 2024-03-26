@@ -22,6 +22,9 @@ struct Env // ADSR
     f64 m_releaseTime;
 
     f32 m_level;
+
+    u32 m_plotIndex;
+    f32 m_plotLevels[200];
 };
 
 struct Synthesizer
@@ -37,8 +40,11 @@ struct Synthesizer
     f32 m_level;
 };
 
-f32 oscSample( Osc* osc );
-f32 envLevel( Env* env, f64 time );
-f32 mixSample( Osc* osc, Env* env, f64 time );
+void resetSynth( Synthesizer* synth );
+void changeVolume( Synthesizer* synth, f32 level );
+void changePitch( Synthesizer* synth, Osc* osc, f32 hz );
+f32  oscSample( Osc* osc );
+f32  envLevel( Env* env, f64 time );
+f32  mixSample( Osc* osc, Env* env, f64 time );
 
 #endif//CNC_SYNTH_H

@@ -103,21 +103,55 @@ void ShowUserinterface( bool* showui, Application* app )
 
     static f32 volume   =   2.0f;
     static f32 pitch    = 200.0f;
-    ImGui::SeparatorText("SYNTH");
-    ImGui::Spacing();
+    ImGui::SeparatorText("SYNTH"); ImGui::Spacing();
     if( ImGuiKnobs::Knob( "VOLUME",   &volume, 0.0f,  100.0f,  1.0f, "%.1fdB", ImGuiKnobVariant_WiperDot ) )
     {
         changeVolume( synth, volume );
-    }   
-    ImGui::SameLine();
+    } ImGui::SameLine();
     
     if( ImGuiKnobs::Knob( "PITCH", &pitch,  100.0f, 800.0f, 10.0f, "%.1fHz",   ImGuiKnobVariant_WiperDot ) )
     {
         changePitch( synth, &synth->m_osc, pitch );
-    } 
-    ImGui::SameLine();
+    } ImGui::SameLine();
+    
     ImGui::PlotLines("LEVEL", synth->m_env.m_plotLevels, 200);
     
+    ImGui::SeparatorText( "ENVELOPE" );
+
+    static f32 attack  = 0.5f; static f32 attackL  = 0.5f;
+    static f32 decay   = 0.5f; static f32 decayL   = 0.5f;
+    static f32 sustain = 0.5f;
+    static f32 release = 0.5f;
+    if( ImGuiKnobs::Knob( "ATTACK", &attack,  0.0f, 1.0f, 0.1f, "%.1fs",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    } 
+    ImGui::SameLine();
+    if( ImGuiKnobs::Knob( "DECAY", &decay,  0.0f, 1.0f, 0.1f, "%.1fs",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    } 
+    ImGui::SameLine();
+    if( ImGuiKnobs::Knob( "SUSTAIN", &sustain,  0.0f, 1.0f, 0.1f, "%.1fs",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    } 
+    ImGui::SameLine();
+    if( ImGuiKnobs::Knob( "RELEASE", &release,  0.0f, 1.0f, 0.1f, "%.1fs",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    }
+    ImGui::SameLine();
+    if( ImGuiKnobs::Knob( "ATTACK L", &attackL,  0.0f, 1.0f, 0.1f, "%.1fdB",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    }
+    ImGui::SameLine();
+    if( ImGuiKnobs::Knob( "DECAY L", &decayL,  0.0f, 1.0f, 0.1f, "%.1fdB",   ImGuiKnobVariant_WiperDot ) )
+    {
+        updateEnvelope( &synth->m_env, attack, decay, sustain, release, attackL, decayL );
+    }
+
     ImGui::SeparatorText( "PLAYER" );
     ImGui::Spacing();
     if( ImGui::Button( "PLAY" ) ) 

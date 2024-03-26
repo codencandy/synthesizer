@@ -19,6 +19,16 @@ void changePitch( Synthesizer* synth, Osc* osc, f32 hz )
     osc->m_phaseIncrement = (2.0f * M_PI) / (synth->m_samplerate / osc->m_freq);
 }
 
+void updateEnvelope( Env* env, f32 attack, f32 decay, f32 sustain, f32 release, f32 attackL, f32 decayL )
+{
+    env->m_attackTime  = attack;
+    env->m_attackLevel = attackL;
+    env->m_decayTime   = attack + decay;
+    env->m_decayLevel  = decayL;
+    env->m_sustainTime = attack + decay + sustain;
+    env->m_releaseTime = attack + decay + sustain + release;
+}
+
 f32 oscSample( Osc* osc )
 {
     f32 sample = sin( osc->m_phase );
@@ -56,8 +66,8 @@ f32 envLevel( Env* env, f64 time )
     if( time > env->m_attackTime && time < env->m_decayTime )
     {
         f32 diff = env->m_attackLevel - env->m_decayLevel;
-        factor = (time - env->m_attackTime) / env->m_decayTime;
-        env->m_level  = env->m_attackLevel - (diff * factor);
+        factor = 1.0f - (time / env->m_decayTime);
+        env->m_level  = env->m_decayLevel + (diff * factor);
     }
     // S
     // time from decay time to sustain time
@@ -71,7 +81,7 @@ f32 envLevel( Env* env, f64 time )
     // level from decay level to 0
     if( time > env->m_sustainTime && time < env->m_releaseTime )
     {
-        factor = (time - env->m_attackTime - env->m_decayTime - env->m_sustainTime) / env->m_releaseTime;
+        factor = (time / env->m_releaseTime);
         env->m_level  = env->m_decayLevel - ( env->m_decayLevel * factor);
     }
 

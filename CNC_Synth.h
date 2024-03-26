@@ -43,6 +43,7 @@ struct Synthesizer
 void resetSynth( Synthesizer* synth );
 void changeVolume( Synthesizer* synth, f32 level );
 void changePitch( Synthesizer* synth, Osc* osc, f32 hz );
+void updateEnvelope( Env* env, f32 attack, f32 decay, f32 sustain, f32 release, f32 attackL, f32 decayL );
 f32  oscSample( Osc* osc );
 f32  envLevel( Env* env, f64 time );
 f32  mixSample( Osc* osc, Env* env, f64 time );

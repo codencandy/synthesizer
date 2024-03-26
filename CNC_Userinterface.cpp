@@ -1,6 +1,7 @@
 #include "CNC_Types.h"
 #include "CNC_Application.h"
 #include <imgui.h>
+#include <imgui-knobs.h>
 
 void CustomizeUi()
 {
@@ -100,19 +101,19 @@ void ShowUserinterface( bool* showui, Application* app )
     
     ImGui::Begin( "SYNTHESIZER UI", showui );
 
-    f32 volume   = 1.0f;
-    f32 pitch    = 1.0f;
+    static f32 volume   = 0.0f;
+    static f32 pitch    = 200.0f;
     
     ImGui::SeparatorText("SYNTH");
     ImGui::Spacing();
-    ImGui::DragFloat( "VOLUME",   &volume,        0.5f, -90.0f,   90.0f );
-    ImGui::DragFloat( "PITCH",    &pitch,         0.5f, -90.0f,   90.0f );
+    ImGuiKnobs::Knob( "VOLUME", &volume, -10.0f,  10.0f,  0.1f, "%.1fdB", ImGuiKnobVariant_WiperDot );
+    ImGui::SameLine();
+    ImGuiKnobs::Knob( "PITCH",  &pitch,  100.0f, 800.0f, 10.0f, "%.1fHz",   ImGuiKnobVariant_WiperDot );
     
     ImGui::SeparatorText( "PLAYER" );
-    if( ImGui::Button( "PLAY" ) ) platform->startPlayer( audioEngine );
+    ImGui::Spacing();
+    if( ImGui::Button( "PLAY" ) ) platform->startPlayer( audioEngine ); ImGui::SameLine();
     if( ImGui::Button( "STOP" ) ) platform->stopPlayer( audioEngine );
-
-    ImGui::SeparatorText( "SYNTH" );
 
     ImGui::End();
 }

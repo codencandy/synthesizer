@@ -96,7 +96,7 @@ void ShowUserinterface( bool* showui, Application* app )
     Synthesizer* synth       = &app->m_synth;
     Env*         env         = &synth->m_env;
 
-    ImGui::SetNextWindowSize(ImVec2(320,480), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(600,540), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos( ImVec2( 11, 11), ImGuiCond_FirstUseEver );
     
     ImGui::Begin( "SYNTHESIZER UI", showui );

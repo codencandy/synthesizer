@@ -3,4 +3,4 @@
 	url = https://github.com/codencandy/imgui
 [submodule "libs/imgui-knobs"]
 	path = libs/imgui-knobs
-	url = https://github.com/altschuler/imgui-knobs.git
+	url = https://github.com/codencandy/imgui-knobs.git

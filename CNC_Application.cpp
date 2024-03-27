@@ -21,14 +21,14 @@ void Load( Application* application )
     osc->m_phaseIncrement = (2.0f * M_PI) / (synth->m_samplerate / osc->m_freq); 
 
     // init env
+    env->m_attackTime     = 0.2f;
+    env->m_decayTime      = env->m_attackTime  + 0.2f;
+    env->m_sustainTime    = env->m_decayTime   + 0.2f;    
+    env->m_releaseTime    = env->m_sustainTime + 0.2f;
+    
     env->m_attackLevel    = 0.8f;
-    env->m_attackTime     = 0.3f;
-    
     env->m_decayLevel     = 0.5f;
-    env->m_decayTime      = 0.6f;
     
-    env->m_sustainTime    = 1.0f;    
-    env->m_releaseTime    = 1.5f;
 }
 
 void Update( Application* application )

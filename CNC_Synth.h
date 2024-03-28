@@ -13,13 +13,18 @@ struct Osc
 
 struct Env // ADSR
 {
-    f64 m_startTime;
     f32 m_attackLevel;
     f64 m_attackTime;
+    f32 m_a;
+    
     f32 m_decayLevel;
     f64 m_decayTime;
+    f32 m_d;
+    
     f32 m_sustainTime;
+    
     f64 m_releaseTime;
+    f32 m_r;
 
     f32 m_level;
 

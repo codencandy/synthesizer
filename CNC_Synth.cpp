@@ -27,6 +27,14 @@ void updateEnvelope( Env* env, f32 attack, f32 decay, f32 sustain, f32 release, 
     env->m_decayLevel  = decayL;
     env->m_sustainTime = attack + decay + sustain;
     env->m_releaseTime = attack + decay + sustain + release;
+
+    env->m_a = env->m_attackLevel / (env->m_attackTime * env->m_attackTime);
+
+    f32 t    = (env->m_decayTime - env->m_attackTime);
+    env->m_d = (env->m_attackLevel - env->m_decayLevel) / (t*t);
+
+    f32 t1   = env->m_releaseTime - env->m_sustainTime;
+    env->m_r = env->m_decayLevel / (t1 * t1);
 }
 
 f32 oscSample( Osc* osc )
@@ -52,10 +60,8 @@ f32 envLevel( Env* env, f64 time )
     // RELEASE
     if( time > env->m_sustainTime )    
     {
-        f32 t1 = env->m_releaseTime - env->m_sustainTime;
-        f32 m = env->m_decayLevel / (t1 * t1);
         f32 t2 = env->m_releaseTime - time;
-        env->m_level = m * (t2*t2);
+        env->m_level = env->m_r * (t2*t2);
     }
     // SUSTAIN
     else if( time > env->m_decayTime )  
@@ -65,18 +71,15 @@ f32 envLevel( Env* env, f64 time )
     // DECAY
     else if( time > env->m_attackTime ) 
     {
-        f32 t = (env->m_decayTime - env->m_attackTime);
-        f32 m = (env->m_attackLevel - env->m_decayLevel) / (t*t);
         f32 c = env->m_decayLevel;
         f32 t2 = (env->m_decayTime - time);
 
-        env->m_level = m * (t2*t2) + c;
+        env->m_level = env->m_d * (t2*t2) + c;
     }
     // ATTACK
     else  
     {
-        f32 m = env->m_attackLevel / (env->m_attackTime * env->m_attackTime);
-        env->m_level = m * (time * time);
+        env->m_level = env->m_a * (time * time);
     }
 
     return env->m_level;

@@ -109,7 +109,7 @@ void ShowUserinterface( bool* showui, Application* app )
         changeVolume( synth, volume );
     } ImGui::SameLine();
     
-    if( ImGuiKnobs::Knob( "PITCH", &pitch,  100.0f, 800.0f, 10.0f, "%.1fHz",   ImGuiKnobVariant_WiperDot ) )
+    if( ImGuiKnobs::Knob( "PITCH", &pitch,  40.0f, 800.0f, 10.0f, "%.1fHz",   ImGuiKnobVariant_WiperDot ) )
     {
         changePitch( synth, &synth->m_osc, pitch );
     } ImGui::SameLine();

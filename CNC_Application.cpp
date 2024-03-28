@@ -3,9 +3,10 @@
 
 void Load( Application* application )
 {
-    Synthesizer* synth = &application->m_synth;
-    Osc*         osc   = &application->m_synth.m_osc;
-    Env*         env   = &application->m_synth.m_env;
+    Synthesizer* synth   = &application->m_synth;
+    Osc*         osc     = &application->m_synth.m_osc;
+    Env*         env     = &application->m_synth.m_env;
+    FreqShifter* shifter = &application->m_synth.m_shifter;
 
     // init synth
     // samples per 2PI = 44100 / hz
@@ -22,6 +23,14 @@ void Load( Application* application )
 
     // init env
     updateEnvelope( env, 0.2f, 0.2f, 0.2f, 0.2f, 0.8f, 0.5f );
+
+    // init shifter
+    shifter->m_startFreq     = osc->m_freq;
+    shifter->m_endFreq       = osc->m_freq * 0.5f;
+    shifter->m_tStart        = env->m_sustainTime;
+    shifter->m_tEnd          = env->m_releaseTime;
+    shifter->m_osc           = osc;
+    shifter->m_freqDecrement = (shifter->m_startFreq - shifter->m_endFreq) / 10.0f;
 }
 
 void Update( Application* application )
@@ -50,6 +59,15 @@ void RenderSound( SoundBuffer* soundBuffer, void* applicationContext )
         *right++ = sample * synth->m_level;
 
         synth->m_currentTime += synth->m_timePerSample;
+    }
+
+    if( synth->m_currentTime > synth->m_env.m_sustainTime )
+    {
+        FreqShifter* shifter = &synth->m_shifter;
+        Osc*         osc     = shifter->m_osc;
+
+        f32 newFreq = osc->m_freq - shifter->m_freqDecrement;
+        //changePitch( synth, osc, newFreq );
     }
     
     if( synth->m_env.m_plotIndex < 200 )

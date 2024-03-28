@@ -52,9 +52,10 @@ f32 envLevel( Env* env, f64 time )
     // RELEASE
     if( time > env->m_sustainTime )    
     {
-        f32 m = env->m_decayLevel / (env->m_sustainTime * env->m_sustainTime);
-        f32 t = env->m_releaseTime - time;
-        env->m_level = m * (t*t);
+        f32 t1 = env->m_releaseTime - env->m_sustainTime;
+        f32 m = env->m_decayLevel / (t1 * t1);
+        f32 t2 = env->m_releaseTime - time;
+        env->m_level = m * (t2*t2);
     }
     // SUSTAIN
     else if( time > env->m_decayTime )  

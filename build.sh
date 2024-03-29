@@ -25,6 +25,8 @@ main()
     else
         echo "only platform build"
         time platform
+        CODE_SIZE=$(cloc --exclude-list-file=.clocignore . | grep -o -E '([0-9]+)' | tail -1)
+        echo "-> LINES OF CODE: " $CODE_SIZE
     fi
 }
 
